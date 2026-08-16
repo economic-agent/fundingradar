@@ -55,12 +55,22 @@ def funding_snapshot(meta: dict, ctxs: list[dict], min_open_interest: float,
     return rows
 
 
+def funding_history(coin: str, hours: int) -> list[float]:
+    """Last `hours` of funding rates for a coin (hourly epochs)."""
+    now = int(time.time() * 1000)
+    start = now - hours * 3600 * 1000
+    d = _post({"type": "fundingHistory", "coin": coin, "startTime": start})
+    return [float(x["fundingRate"]) for x in d if x.get("fundingRate") is not None]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Hyperliquid funding scanner")
     ap.add_argument("--top", type=int, default=10)
     ap.add_argument("--min-oi", type=float, default=100_000.0)
     ap.add_argument("--coins", default=None,
                     help="comma-separated list, e.g. ETH,BTC,SOL (empty = all)")
+    ap.add_argument("--history", type=int, default=None,
+                    help="hours of funding history to summarize for each coin")
     ap.add_argument("--json-out", default=None, help="write snapshot JSON")
     ap.add_argument("--csv-out", default=None,
                     help="append rows to CSV (coin, hourly pct, ann pct, premium, oi, mark)")
@@ -79,6 +89,19 @@ def main() -> int:
             f"{r['funding_annualized_pct']:>9.2f} {r['premium']:>8.4f} "
             f"{r['open_interest']:>14,.0f}"
         )
+    if args.history:
+        print(f"\nfunding history ({args.history}h): coin, min, avg, max, current (hourly %)")
+        for r in rows[: args.top]:
+            try:
+                h = funding_history(r["coin"], args.history)
+            except Exception:
+                continue
+            if len(h) < 2:
+                continue
+            print(
+                f"{r['coin']:<10} {min(h)*100:>8.4f} {sum(h)/len(h)*100:>8.4f} "
+                f"{max(h)*100:>8.4f} {h[-1]*100:>8.4f}"
+            )
     snap = {"ts": int(time.time()), "rows": rows}
     if args.json_out:
         with open(args.json_out, "w") as f:
