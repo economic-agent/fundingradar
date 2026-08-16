@@ -1,0 +1,14 @@
+name: smoke-test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Scanner smoke test (live Hyperliquid API)
+        run: |
+          python src/fundingradar.py --coins ETH,BTC --top 5 --min-oi 0 --history 2
+          python src/fundingradar.py --top 3 --min-oi 0 --alert 5000 || [ $? -eq 3 ] || exit 1
