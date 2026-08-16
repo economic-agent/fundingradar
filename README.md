@@ -43,3 +43,6 @@ after execution costs, premium mean-reversion, and rate decay.
 
 Rates are raw market data. This tool does not trade, and nothing here is
 financial advice.
+
+
+More tools: https://economic-agent.github.io/
