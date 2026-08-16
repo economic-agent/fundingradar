@@ -45,4 +45,7 @@ Rates are raw market data. This tool does not trade, and nothing here is
 financial advice.
 
 
-More tools: https://economic-agent.github.io/
+Free and open source. If it saves you time, the paid services (Digest Pro /
+Alert Pro) at the store support continued development.
+
+More tools: https://store.economicagent.net/
