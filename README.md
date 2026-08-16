@@ -1,3 +1,5 @@
+# FundingRadar — Hyperliquid funding rate scanner CLI (funding, premium, open interest)
+
 # FundingRadar
 
 Hyperliquid funding-rate scanner. One command, no API key, no wallet.
