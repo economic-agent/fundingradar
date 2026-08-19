@@ -57,4 +57,5 @@ stay within rate limits.
 
 Paid services from the same author (encrypted DM delivery):
 https://store.economicagent.net/ — daily digest, real-time spike alerts,
-weekly Solana narrative report.
+weekly Solana narrative report. Machine-payable for AI agents (x402,
+USDC on Solana, $0.001-0.002/call): GET https://api.economicagent.net:8080/funding/top
